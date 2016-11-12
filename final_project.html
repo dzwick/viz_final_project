@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>A-Team Visualization</title>
+    <link rel="stylesheet" href="public/css/styles.css"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
+    <script src="http://d3js.org/colorbrewer.v1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        path {
+            fill: none;
+            stroke-width: 1px;
+            stroke: #222;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>Finding The Right College</h1>
+</header>
+
+<div id="school-search" class="ui-widget">
+  <label for="schools">Top School: </label>
+  <input id="schoolchoice">
+</div>
+
+<div id="schools" class="view">
+  <div id="topschool" class="view">
+    <h2 id="label">Top School</h2>
+    <h3>Name</h3>
+    <span id="schoolname"></span>
+    <h3>Tuition</h3>
+    <span id="tuition"></span>
+    <h3>Average SAT</h3>
+    <span id="SAT"></span>
+    <h3>Admission Rate</h3>
+    <span id="admission"></span>
+    <h3>Location</h3>
+    <span id="location"></span>
+  </div>
+  
+  <div id="choiceschool" class="view">
+    <h2 id="label">Other School</h2>
+    <h3>Name</h3>
+    <span id="schoolname"></span>
+    <h3>Tuition</h3>
+    <span id="tuition"></span>
+    <h3>Average SAT</h3>
+    <span id="SAT"></span>
+    <h3>Admission Rate</h3>
+    <span id="admission"></span>
+    <h3>Location</h3>
+    <span id="location"></span>
+  </div>
+</div>
+  
+<div id="map" class="view">
+  <svg id="map-layout"></svg>
+</div>
+
+<div id="closeschools" class="view">
+  <h2>Similar Schools</h2>
+  <ol id="school-list"></ol>
+</div>
+
+<div id="barChart">
+  <h2>Bar Chart</h2>
+  <div id="plot-selector">
+    <label> Plot:</label>
+    <select id="dataset">
+        <option selected value="COST">Tuition</option>
+        <option value="CCSIZSET">Size</option>
+        <option value="SAT_AVG_ALL">Average SAT</option>
+        <option value="ADM_RATE_ALL">Admission Rate</option>
+    </select>
+    </div>
+</div>
+
+<div id="sliderLayout">
+  <h2>Sliders</h2>
+</div>
+
+<script type="application/javascript" src="public/js/sliderLayout.js"></script>
+<script type="application/javascript" src="public/js/barChart.js"></script>
+<script type="application/javascript" src="public/js/script.js"></script>
+<script type="application/javascript" src="public/js/main.js"></script>
+</body>
+</html>
