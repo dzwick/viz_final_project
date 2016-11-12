@@ -1,0 +1,90 @@
+//Utah Big Data Competition
+//The A-Team
+
+#schoolchoice {
+    width: 500px;
+}
+
+.school-specifics {
+    float: left;
+    width: 250px;
+    padding: 0.5em;
+}
+
+#map {
+    float: left;
+}
+
+#list {
+    float: left;
+    width: 250px;
+}
+
+.top-school {
+    fill: red;
+    opacity: .8;
+}
+
+.similar-school {
+    fill: steelblue;
+    opacity: .8
+}
+
+.school-hover {
+    fill: green;
+    background-color: green;
+    opacity: .4;
+}
+
+.selected-school {
+    fill: green;
+    background-color: green;
+    opacity: .8;
+}
+
+h1 {
+    margin-top: 0;
+    font-family: 'dusha';
+    color: #d20a11;
+}
+
+h2 {
+    font-family: 'dusha';
+    color: #d20a11;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+h3 {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+* {
+    font-family: 'aller';
+}
+
+header {
+    clear: right;
+    text-align: left;
+}
+
+.view {
+    padding: 0.5em;
+
+}
+
+.teamlist {
+    margin-bottem: 1em;
+}
+
+path {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #222;
+}
+
+.ui-widget input{
+    width: 500px;
+}
