@@ -79,7 +79,7 @@ BarChart.prototype.update = function () {
         .classed('selected', false)
 
     bars
-        .filter(function (d) {console.log('selected school: ' + d.INSTNM + self.selectedSchool); return d.INSTNM == self.selectedSchool })
+        .filter(function (d) {return d.INSTNM == self.selectedSchool })
         .classed('selected', true)
 
 

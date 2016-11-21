@@ -20,15 +20,15 @@
         // var electoralVoteChart = new ElectoralVoteChart(shiftChart);
 
         var barChart = new BarChart();
+	var schoolMap = new SchoolMap();
 
         //load the data corresponding to all the election years
         //pass this data and instances of all the charts that update on year selection to yearChart's constructor
         d3.csv("data/School_Data.csv", function (data) {
             //pass the instances of all the charts that update on selection change in YearChart
             schoolData = data;
-            var script = new Script(barChart, schoolData);
+            var script = new Script(barChart, schoolMap, schoolData);
             var sliderLayout = new SliderLayout(barChart, schoolData);
-            console.log('sliderLayoutUpdate')
             sliderLayout.update()
         });
 

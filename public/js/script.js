@@ -4,71 +4,54 @@
 //Dylan Zwick
 //u0075213
 
-function Script (barChart, schoolData) {
+function Script (barChart, schoolMap, schoolData) {
     var self = this;
-    self.barChart = barChart
-    // self.electoralVoteChart = electoralVoteChart;
-    // self.tileChart = tileChart;
-    // self.votePercentageChart = votePercentageChart;
-    // self.shiftChart = shiftChart;
+    self.barChart = barChart;
+    self.schoolMap = schoolMap;
     self.schoolData = schoolData;
     self.init();
 };
 
 Script.prototype.init = function(){
     var self = this;
-    console.log('5')
-    self.update()
-    self.mapWidth = 500
-    self.mapHeight = 300
+    self.mapWidth = 1000;
+    self.mapHeight = 500;
+
+    schoolNames = self.schoolData.map(function(d,i){return d.INSTNM});
+    $( function() {
+	$("#schoolchoice").autocomplete({
+            source:schoolNames,
+            max:10,
+            autoFocus:true,
+            select: function(event, ui){
+		self.updateMainInfo(ui.item.value);
+            }
+	});
+    });
+
+    d3.csv("data/similarity_rankings.csv", function (data) {
+	schoolMatrix = data;
+    });
+
+    d3.json("data/us-states.json", function (error, nation) {
+	if (error) throw error;
+	self.drawMap(nation);
+    });
+    
 };
 
 Script.prototype.update = function() {
     var self = this;
 
-    console.log('6')
-    schoolNames = self.schoolData.map(function(d,i){return d.INSTNM});
-    $( function() {
-    $("#schoolchoice").autocomplete({
-        source:schoolNames,
-        max:10,
-        autoFocus:true,
-        select: function(event, ui){
-        self.updateMainInfo(ui.item.value);
-        }
-    });
+    /*d3.csv("data/similarity_rankings.csv", function (data) {
+	schoolMatrix = data;
     });
 
-// var schoolData
-
-var schooMatrix
-
-// var schoolNames
-
-// d3.csv("data/School_Data.csv", function(data) {
-//     schoolData = data;
-//     schoolNames = schoolData.map(function(d,i){return d.INSTNM});
-//     $( function() {
-// 	$("#schoolchoice").autocomplete({
-// 	    source:schoolNames,
-// 	    max:10,
-// 	    autoFocus:true,
-// 	    select: function(event, ui){
-// 		updateMainInfo(ui.item.value);
-// 	    }
-// 	});
-//     });
-// });
-
-d3.csv("data/similarity_rankings.csv", function (data) {
-    schoolMatrix = data;
-});
-
-d3.json("data/us-states.json", function (error, nation) {
-    if (error) throw error;
-    self.drawMap(nation);
-});
-
+    d3.json("data/us-states.json", function (error, nation) {
+	if (error) throw error;
+	self.drawMap(nation);
+    });
+    */
 }
 
 Script.prototype.updateMainInfo = function (selectedSchool) {
@@ -80,7 +63,6 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
 	return d.UNITID == selectedSchoolData.UNITID})[0];
     var similarSchoolIDs = $.map(similarSchools, function(d,i){return[d]});
     var similarSchoolsArray = [];
-    console.log('sim: ' + similarSchools)
     for(var i = 0; i < similarSchoolIDs.length; i++)
     {
 	similarSchoolsArray.push(
@@ -88,9 +70,9 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
 		return d.UNITID == similarSchoolIDs[i]})[0]
 	);
     }
-
+    
     self.barChart.updateData(similarSchoolsArray, selectedSchool)
-
+    
     //Pretty straightforward.
     d3.select('#topschool').select('#schoolname').text(selectedSchoolData.INSTNM);
     d3.select('#topschool').select('#tuition').text(selectedSchoolData.COST);
@@ -101,7 +83,7 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
     var schoolnames = d3.select("#school-list")
 	.selectAll("li")
 	.data(similarSchoolsArray.slice(1))
-
+    
     schoolnames
 	.exit()
 	.remove()
@@ -116,7 +98,7 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
 	    self.updateSimilarInfo(d)})
 	.text(function(d) {return d.INSTNM})
 	.merge(schoolnames);
-
+    
     schoolnames
 	.attr("id",function(d) {
 	    return d.INSTNM.replace(/\s/g,'');
@@ -128,8 +110,10 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
 	.on("click", function(d) {
 	    self.updateSimilarInfo(d)})
 	.text(function(d) {return d.INSTNM})
+
     
-    var mapsvg = d3.select("#map-layout");
+    
+    /*var mapsvg = d3.select("#map-layout");
     
     var projection = d3.geoAlbersUsa()
         .translate([self.mapWidth/2, self.mapHeight/2])
@@ -167,17 +151,18 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
         .attr("cy", projection([selectedSchoolData.LONGITUDE, selectedSchoolData.LATITUDE])[1])
         .attr("r", Math.sqrt(selectedSchoolData.COST)/30)
 	.classed("top-school",true);
+	*/
 }
 
 Script.prototype.clearSimilarInfo = function() {
     var self = this;
 
     //Pretty straightforward.
-    d3.select('#choiceschool').select('#schoolname').text("");
-    d3.select('#choiceschool').select('#tuition').text("");
-    d3.select('#choiceschool').select('#SAT').text("");
-    d3.select('#choiceschool').select('#admission').text("");
-    d3.select('#choiceschool').select('#location').text("");
+    d3.select('#selected-school').select('#schoolname').text("");
+    d3.select('#selected-school').select('#tuition').text("");
+    d3.select('#selected-school').select('#SAT').text("");
+    d3.select('#selected-school').select('#admission').text("");
+    d3.select('#selected-school').select('#location').text("");
 
     d3.select('#school-list').selectAll("li")
 	.classed("selected-school",false)
@@ -214,11 +199,11 @@ Script.prototype.updateHoverInfo = function (selectedSchool) {
 Script.prototype.updateSimilarInfo = function (selectedSchool) {
     var self = this;
     //Pretty straightforward.
-    d3.select('#choiceschool').select('#schoolname').text(selectedSchool.INSTNM);
-    d3.select('#choiceschool').select('#tuition').text(selectedSchool.COST);
-    d3.select('#choiceschool').select('#SAT').text(selectedSchool.SAT_AVG_ALL);
-    d3.select('#choiceschool').select('#admission').text(selectedSchool.ADM_RATE_ALL);
-    d3.select('#choiceschool').select('#location').text((selectedSchool.CITY).concat(", ".concat(selectedSchool.STABBR)));
+    d3.select('#selected-school').select('#schoolname').text(selectedSchool.INSTNM);
+    d3.select('#selected-school').select('#tuition').text(selectedSchool.COST);
+    d3.select('#selected-school').select('#SAT').text(selectedSchool.SAT_AVG_ALL);
+    d3.select('#selected-school').select('#admission').text(selectedSchool.ADM_RATE_ALL);
+    d3.select('#selected-school').select('#location').text((selectedSchool.CITY).concat(", ".concat(selectedSchool.STABBR)));
     
     d3.select('#school-list').selectAll("li")
 	.classed("selected-school",false)
@@ -238,9 +223,9 @@ Script.prototype.updateSimilarInfo = function (selectedSchool) {
 Script.prototype.drawMap = function (nation) {
     var self = this;
     var mapsvg = d3.select("#map-layout");
-
+    
     var projection = d3.geoAlbersUsa()
-            .translate([self.mapWidth/2, self.mapHeight/2])
+        .translate([self.mapWidth/2, self.mapHeight/2])
             .scale([self.mapWidth]);
 
     var path = d3.geoPath()
