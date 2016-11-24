@@ -21,89 +21,26 @@
     </style>
 </head>
 
-<body>
-<header>
-    <h1>Finding The Right College</h1>
-</header>
-
-<div id="school-search" class="ui-widget">
-  <label for="schools">Top School: </label>
-  <input id="schoolchoice">
+<div id="fixed-header">
+  <h1>Finding The Right College</h1>
+  <div id="school-search" class="ui-widget">
+    <label for="schools">School Search: </label>
+    <input id="schoolchoice"></input>
+  </div>
 </div>
 
-<div id="main-layout">
-  <div id="school-data">
-    <div id="topschool" class="school-info">
-      <h2 id="label">Top School</h2>
-      <h3>Name</h3>
-      <span id="schoolname"></span>
-      <h3>Tuition</h3>
-      <span id="tuition"></span>
-      <h3>Average SAT</h3>
-      <span id="SAT"></span>
-      <h3>Admission Rate</h3>
-      <span id="admission"></span>
-      <h3>Location</h3>
-      <span id="location"></span>
-    </div>
+<div id="map">
+  <svg id="map-layout"></svg>
+</div>
+
+<div id="fixed-footer">
+  <div id="more-data"></div>
   
-    <div id="selected-school" class="school-info">
-      <h2 id="label">Other School</h2>
-      <h3>Name</h3>
-      <span id="schoolname"></span>
-      <h3>Tuition</h3>
-      <span id="tuition"></span>
-      <h3>Average SAT</h3>
-      <span id="SAT"></span>
-      <h3>Admission Rate</h3>
-      <span id="admission"></span>
-      <h3>Location</h3>
-      <span id="location"></span>
-    </div>
-  </div>
-
-  <div id="similar-schools">
-    <div id="map" class="view">
-      <div id="data-dropdown">
-	<label> Plot:</label>
-	<select id="data-select">
-          <option selected value="COST">Tuition</option>
-          <option value="CCSIZSET">Size</option>
-          <option value="SAT_AVG_ALL">Average SAT</option>
-          <option value="ADM_RATE_ALL">Admission Rate</option>
-	</select>
-      </div>
-      <svg id="map-layout"></svg>
-    </div>
-
-    <div id="closeschools" class="view">
-      <h2>Similar Schools</h2>
-      <ol id="school-list"></ol>
-    </div>
-  </div>
-
-<div id="barChart">
-  <h2>Bar Chart</h2>
-  <div id="plot-selector">
-    <label> Plot:</label>
-    <select id="dataset">
-        <option selected value="COST">Tuition</option>
-        <option value="CCSIZSET">Size</option>
-        <option value="SAT_AVG_ALL">Average SAT</option>
-        <option value="ADM_RATE_ALL">Admission Rate</option>
-    </select>
-    </div>
 </div>
-
-<div id="sliderLayout">
-  <h2>Sliders</h2>
-</div>
-
+  
 <script type="application/javascript" src="public/js/sliderLayout.js"></script>
-<script type="application/javascript" scr="public/js/schoolMap.js"></script>
-<script type="application/javascript" scr="public/js/supboi.js"></script>
+<script type="application/javascript" src="public/js/schoolMap.js"></script>
 <script type="application/javascript" src="public/js/barChart.js"></script>
 <script type="application/javascript" src="public/js/script.js"></script>
 <script type="application/javascript" src="public/js/main.js"></script>
-</body>
 </html>

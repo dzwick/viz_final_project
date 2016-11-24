@@ -4,20 +4,16 @@
 //Dylan Zwick
 //u0075213
 
-function Script (barChart, schoolMap, schoolData) {
+function Script (schoolMap) {
     var self = this;
-    self.barChart = barChart;
     self.schoolMap = schoolMap;
-    self.schoolData = schoolData;
     self.init();
 };
 
 Script.prototype.init = function(){
     var self = this;
-    self.mapWidth = 1000;
-    self.mapHeight = 500;
-
-    schoolNames = self.schoolData.map(function(d,i){return d.INSTNM});
+    
+    schoolNames = schoolData.map(function(d,i){return d.INSTNM});
     $( function() {
 	$("#schoolchoice").autocomplete({
             source:schoolNames,
@@ -28,50 +24,27 @@ Script.prototype.init = function(){
             }
 	});
     });
-
-    d3.csv("data/similarity_rankings.csv", function (data) {
-	schoolMatrix = data;
-    });
-
-    d3.json("data/us-states.json", function (error, nation) {
-	if (error) throw error;
-	self.drawMap(nation);
-    });
-    
 };
 
-Script.prototype.update = function() {
+Script.prototype.updateMainInfo = function(selectedSchool){
     var self = this;
-
-    /*d3.csv("data/similarity_rankings.csv", function (data) {
-	schoolMatrix = data;
-    });
-
-    d3.json("data/us-states.json", function (error, nation) {
-	if (error) throw error;
-	self.drawMap(nation);
-    });
-    */
-}
-
-Script.prototype.updateMainInfo = function (selectedSchool) {
-    var self = this
-    self.clearSimilarInfo()
     
-    var selectedSchoolData = self.schoolData.filter(function(d){return d.INSTNM == selectedSchool})[0];
-    var similarSchools = schoolMatrix.filter(function(d){
-	return d.UNITID == selectedSchoolData.UNITID})[0];
-    var similarSchoolIDs = $.map(similarSchools, function(d,i){return[d]});
+    var selectedSchoolData = schoolData.filter(function(d){
+	return d.INSTNM == selectedSchool})[0];
+    var similarSchools = schoolSimilarityMatrix.filter(function(d){
+	return d[0].UNITID == selectedSchoolData.UNITID})[0];
+    /*var similarSchoolIds = $.map(similarSchools, function(d,i){return[d]});
     var similarSchoolsArray = [];
-    for(var i = 0; i < similarSchoolIDs.length; i++)
+    for(var i = 0; i < similarSchoolIds.length; i++)
     {
 	similarSchoolsArray.push(
 	    self.schoolData.filter(function(d){
-		return d.UNITID == similarSchoolIDs[i]})[0]
+		return d.UNITID == similarSchoolIds[i]})[0]
 	);
     }
-    
-    self.barChart.updateData(similarSchoolsArray, selectedSchool)
+    */
+
+    //self.barChart.updateData(similarSchoolsArray, selectedSchool)
     
     //Pretty straightforward.
     d3.select('#topschool').select('#schoolname').text(selectedSchoolData.INSTNM);
@@ -87,7 +60,23 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
     schoolnames
 	.exit()
 	.remove()
+
+    schoolnames
+	.enter()
+	.append("li")
+	.merge(schoolnames)
+	.attr("id",function(d) {
+	    return d.INSTNM.replace(/\s/g,'');
+	})
+	.on("mouseover", function(d) {
+	    self.updateHoverInfo(d)})
+	.on("mouseout", function() {
+	    self.clearHoverInfo()})
+	.on("click", function(d) {
+	    self.updateSimilarInfo(d)})
+	.text(function(d) {return d.INSTNM})
     
+    /*
     schoolnames = schoolnames
 	.enter()
 	.append("li")
@@ -110,48 +99,9 @@ Script.prototype.updateMainInfo = function (selectedSchool) {
 	.on("click", function(d) {
 	    self.updateSimilarInfo(d)})
 	.text(function(d) {return d.INSTNM})
-
+    */
     
-    
-    /*var mapsvg = d3.select("#map-layout");
-    
-    var projection = d3.geoAlbersUsa()
-        .translate([self.mapWidth/2, self.mapHeight/2])
-        .scale([self.mapWidth]);
-
-    mapsvg.selectAll("circle").data([]).exit().remove();
-    
-    mapsvg.selectAll("circle")
-        .data(similarSchoolsArray.slice(1))
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) {
-            return projection([d.LONGITUDE, d.LATITUDE])[0];
-        })
-        .attr("cy", function (d) {
-            return projection([d.LONGITUDE, d.LATITUDE])[1];
-        })
-        .attr("r", function(d) {
-	    return Math.sqrt(d.COST)/30;
-	})
-	.attr("id",function(d) {
-	    return d.INSTNM.replace(/\s/g,'').replace("'","");
-	})
-	.classed("similar-school",true)
-	.on("mouseover", function(d) {
-	    self.updateHoverInfo(d)})
-	.on("mouseout", function() {
-	    self.clearHoverInfo()})
-	.on("click", function(d){
-	    self.updateSimilarInfo(d)});
-
-    mapsvg
-	.append("circle")
-        .attr("cx", projection([selectedSchoolData.LONGITUDE, selectedSchoolData.LATITUDE])[0])
-        .attr("cy", projection([selectedSchoolData.LONGITUDE, selectedSchoolData.LATITUDE])[1])
-        .attr("r", Math.sqrt(selectedSchoolData.COST)/30)
-	.classed("top-school",true);
-	*/
+    self.schoolMap.updateSchools(similarSchoolsArray);
 }
 
 Script.prototype.clearSimilarInfo = function() {
@@ -168,32 +118,6 @@ Script.prototype.clearSimilarInfo = function() {
 	.classed("selected-school",false)
     
     self.clearHoverInfo();
-}
-
-Script.prototype.clearHoverInfo = function () {
-    var self = this
-    d3.select('#school-list').selectAll("li")
-	.classed("school-hover",false)
-
-    d3.select("#map-layout").selectAll("circle")
-	.classed("school-hover",false)
-}
-
-Script.prototype.updateHoverInfo = function (selectedSchool) {
-    var self = this;
-    d3.select('#school-list').selectAll("li")
-	.classed("school-hover",false)
-
-    d3.select('#school-list')
-	.select('#'.concat(selectedSchool.INSTNM.replace(/\s/g,'').replace("'","")))
-	.classed("school-hover",true)
-
-    d3.select("#map-layout").selectAll("circle")
-	.classed("school-hover",false)
-
-    d3.select('#map-layout')
-	.select('#'.concat(selectedSchool.INSTNM.replace(/\s/g,'').replace("'","")))
-	.classed("school-hover",true)
 }
 
 Script.prototype.updateSimilarInfo = function (selectedSchool) {
@@ -220,20 +144,39 @@ Script.prototype.updateSimilarInfo = function (selectedSchool) {
 	.classed("selected-school",true)
 }
 
-Script.prototype.drawMap = function (nation) {
-    var self = this;
+function updateHoverInfo(selectedSchool, proj) {
+    var mapsvg = d3.select("#map-layout")
+
+    clearHoverInfo();
+
+    mapsvg.select('#SID'.concat(selectedSchool[0].UNITID))
+	.attr("class","school-hover")
+
+    for(var i = 1; i < selectedSchool.length; i++)
+    {
+	mapsvg.select('#SID'.concat(selectedSchool[i].UNITID))
+	    .attr("class","school-hover-similar")
+	
+	mapsvg.append("line")
+	    .attr("x1",proj([selectedSchool[0].LONGITUDE,
+			     selectedSchool[0].LATITUDE])[0])
+	    .attr("y1",proj([selectedSchool[0].LONGITUDE,
+			     selectedSchool[0].LATITUDE])[1])
+	    .attr("x2",proj([selectedSchool[i].LONGITUDE,
+			     selectedSchool[i].LATITUDE])[0])
+	    .attr("y2",proj([selectedSchool[i].LONGITUDE,
+			     selectedSchool[i].LATITUDE])[1])
+	    .attr("class","map-line")
+	
+	
+    }	
+}
+
+function clearHoverInfo(){
     var mapsvg = d3.select("#map-layout");
     
-    var projection = d3.geoAlbersUsa()
-        .translate([self.mapWidth/2, self.mapHeight/2])
-            .scale([self.mapWidth]);
+    mapsvg.selectAll("circle")
+	.attr("class","regular-school");
 
-    var path = d3.geoPath()
-            .projection(projection);
-    
-    mapsvg.selectAll("path")
-        .data(nation.features)
-        .enter()
-        .append("path")
-        .attr("d", path);
-}    
+    mapsvg.selectAll("line").remove();
+}
