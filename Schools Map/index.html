@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>CS-6630 Fall, 2016 Final Project</title>
+
+     <!-- CSS libraries -->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Custom CSS styles -->
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="container">
+      <h3>Exploring College Affinities</h3>
+      <h5>Clark Barnett and Dylan Zwick</h5>
+      <div id="map"><!-- Map container --></div>
+      <div id="options">
+	<div id="form" class="three columns">
+	  <input type ="checkbox" id="show-voronoi" !checked>
+	  Show Voronoi Polygons
+	  </input>
+	</div>
+	<div id="zoom-reset" class="two columns">Center</div>
+      </div>
+      <div id="details" class="hidden row"><!-- Details container --></div>
+    </div>
+    <!-- Mustache template, rendered later to show the details of a feature -->
+    <script id="template" type="x-tmpl-mustache">
+      <div class="row">
+	<h3 class="six columns">{{ INSTNM }}</h3>
+	<h4 class="six columns">Most Similar Schools</h4>
+      </div>
+      <div class="row">
+	<table id = "selected-school-data" class = "six columns">
+          <tr>
+            <th>Location:</th>
+            <td>{{ CITY }}, {{ STABBR }}</td>
+          </tr>
+          <tr>
+            <th>Size:</th>
+            <td>{{ CCSIZSET }} </td>
+          </tr>
+          <tr>
+            <th>Cost:</th>
+            <td>${{ COST }} </td>
+          </tr>
+          <tr>
+            <th>Average SAT:</th>
+            <td>{{ SAT_AVG_ALL }} </td>
+          </tr>
+          <tr>
+            <th>Admossion Rate:</th>
+            <td>{{ ADM_RATE_ALL }} </td>
+          </tr>
+	</table>
+	<div id = "closest-schools" class = "three columns">
+	  <ol id = "closest-schools-list"></ol>
+	</div>
+	
+	<div id = "farther-schools" class = "three columns">
+	  <ol id = "farther-schools-list"></ol>
+	</div>
+      </div>
+</div>
+    </script>
+    
+    <!-- JS libraries -->
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- Custom JS code -->
+    <script src="map.js"></script>
+  </body>
+</html>

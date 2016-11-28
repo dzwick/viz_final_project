@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>College Data Exploration</title>
+    <title>Exploring College Affinities</title>
     <link rel="stylesheet" href="public/css/styles.css"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://d3js.org/d3.v4.js"></script>
@@ -12,13 +12,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <style>
-        path {
-            fill: none;
-            stroke-width: 1px;
-            stroke: #222;
-        }
-    </style>
 </head>
 
 <div id="fixed-header">
@@ -33,9 +26,31 @@
   <svg id="map-layout"></svg>
 </div>
 
+
+<div id="fixed-list">
+  <h2>Selected School</h2>
+  <span>
+    <ul id="selected-school-display"></ul>
+  </span>
+  <h3>Similar Schools</h3>
+  <span>
+    <ol id="similar-schools-list"></ol>
+  </span>
+</div>
+
 <div id="fixed-footer">
-  <div id="more-data"></div>
-  
+  <div id="more-data" class="info-cell"><b>More Info</b></div>
+  <div id="selected-school" class="footer-cell">Selected School</div>
+  <div id="ss-value" class="name-cell"></div>
+  <div id="school-size" class="footer-cell">Size</div>
+  <div id="size-value" class="value-cell"></div>
+  <div id="cost" class="footer-cell">Cost</div>
+  <div id="cost-value" class="value-cell"></div>
+  <div id="admission-rate" class="footer-cell">Admission Rate</div>
+  <div id="admission-value" class="value-cell"></div>
+  <div id="Average SAT" class="footer-cell">Average SAT</div>
+  <div id="sat-value" class="value-cell"></div>
+  <div id="filter" class="filter"><b>Filter</b></div>
 </div>
   
 <script type="application/javascript" src="public/js/sliderLayout.js"></script>
@@ -43,4 +58,5 @@
 <script type="application/javascript" src="public/js/barChart.js"></script>
 <script type="application/javascript" src="public/js/script.js"></script>
 <script type="application/javascript" src="public/js/main.js"></script>
+<script type="application/javascript" src="public/js/d3-tip.js"></script>
 </html>

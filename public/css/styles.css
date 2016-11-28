@@ -11,21 +11,92 @@ u0075213*/
     top: 0;
 }
 
+#school-search {
+    position: relative;
+    width: 800px;
+    float: left;
+}
+
 #map {
-    padding-top: 75px;
+    float: left;
+    padding-top: 5%;
+    width: 80%;
+    height: 500px;
+}
+
+#map-layout {
     width: 100%;
+    height: 100%;
+    //width: 1000px;
+    //height: 500px;
+}
+
+#fixed-list {
+    float: right;
+    padding-top: 5%;
+    width: 20%;
+    height: 88%;
 }
 
 #fixed-footer {
     position: fixed;
     width: 100%;
-    height: 10%;
+    height: 8%;
     bottom: 0;
 }
 
-#more-data {
-    width:20%;
-    height: 10%;
+.info-cell {
+    width: 10%;
+    height: 100%;
+    float: left;
+    background-color: yellow;
+}
+
+.footer-cell {
+    width: 5%;
+    height: 100%;
+    float: left;
+    background-color: blue;
+}
+
+.name-cell {
+    width: 16%;
+    height: 100%;
+    float: left;
+}
+
+.value-cell {
+    width: 5%;
+    height: 100%;
+    float: left;
+}
+
+.filter {
+    height: 100%;
+    float: right;
+    padding-right: 5%;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    max-width: 200px;
+    //height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
 }
 
 header {
@@ -49,12 +120,6 @@ main {
     margin-top: 50px;
     width: 100%;
     height: auto;
-}
-
-#school-search {
-    position: relative;
-    width: 800px;
-    float: left;
 }
 
 #school-data {
@@ -102,23 +167,6 @@ main {
     opacity: .8;
 }
 
-.similar-school {
-    fill: steelblue;
-    opacity: .8
-}
-
-.school-hover {
-    fill: green;
-    background-color: green;
-    opacity: .4;
-}
-
-.selected-school {
-    fill: green;
-    background-color: green;
-    opacity: .8;
-}
-
 .regular-school {
     r: 2;
     fill: black;
@@ -126,7 +174,9 @@ main {
 
 .school-hover {
     r: 6;
+    background-color: steelblue;
     fill: green;
+    opacity: 1 !important;
 }
 
 .school-hover-similar {
@@ -257,10 +307,7 @@ h3 {
     border-left-style: solid;
 }
 
-#map-layout {
-    width: 1000px;
-    height: 500px;
-}
+
 
 #links > line {
     stroke: rgb(216, 216, 216);
@@ -288,6 +335,25 @@ h3 {
     fill-opacity: 1;   
     fill: red;
 }
+
+.similar-school {
+    fill: steelblue;
+    r: 8;
+    opacity: 1;
+}
+
+.selected-school {
+    fill: red;
+    r: 10;
+    opacity: 1 !important;
+}
+
+path {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #222;
+}
+
 /* Styles that clean up the layout;
  * you can ignore these: */
 

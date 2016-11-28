@@ -6,23 +6,25 @@ function SchoolMap() {
 SchoolMap.prototype.init = function(){
     var self = this;
     var nation;
-    self.mapWidth = 1000;
-    self.mapHeight = 500;
-    self.projection = d3.geoAlbersUsa()
-	.translate([self.mapWidth/2,self.mapHeight/2])
-	.scale([self.mapWidth]);
     self.mapsvg = d3.select("#map-layout");
 
     d3.json("data/us-states.json", function (error, nation) {
 	if (error) throw error;
 	self.drawMap(nation);
 	self.drawSchools();
+	self.zoomMap();
     });
 };
 
 SchoolMap.prototype.drawMap = function(nation){
     var self = this;
-    var path = d3.geoPath().projection(self.projection);
+    var path = d3.geoPath().projection(proj);
+
+    /*var zoom = d3.behavior.zoom()
+	.scaleExtent([1,10])
+	.on("zoom",zoomed)
+    */
+    //self.mapsvg.call(zoom);
     
     self.mapsvg
 	.selectAll("path")
@@ -43,22 +45,27 @@ SchoolMap.prototype.drawSchools = function(){
 	return d[0].STABBR != "GU"
 	    && d[0].STABBR != "PR"
 	    && d[0].STABBR != "VI"});
+
+    var div = d3.select("body")
+	.append("div")
+	.attr("class","tooltip")
+	.style("opacity",0)
     
-    self.similarSchools = self.mapsvg
+    similarSchools = self.mapsvg
 	.selectAll("circle")
 	.data(schoolDataMap);
     
-    self.similarSchools.exit().remove();
+    similarSchools.exit().remove();
     
-    self.similarSchools = self.similarSchools
+    similarSchools = similarSchools
 	.enter()
 	.append("circle")
-	.merge(self.similarSchools)
+	.merge(similarSchools)
         .attr("cx", function (d) {
-            return self.projection([d[0].LONGITUDE, d[0].LATITUDE])[0];
+            return proj([d[0].LONGITUDE, d[0].LATITUDE])[0];
         })
         .attr("cy", function (d) {
-            return self.projection([d[0].LONGITUDE, d[0].LATITUDE])[1];
+            return proj([d[0].LONGITUDE, d[0].LATITUDE])[1];
         })
 	.attr("id",function(d) {
 	    //SID stands for School ID
@@ -66,20 +73,58 @@ SchoolMap.prototype.drawSchools = function(){
 	})
 	.attr("class","regular-school")
 	.on("mouseover", function(d) {
-	    updateHoverInfo(d,self.projection)})
+	    updateHoverInfo(d);
+	    div.transition()
+		.duration(500)
+		.style("opacity",.9)
+	    div.html("<b>" + d[0].INSTNM
+		     + "</b><br/><br/>"
+		     + d[0].CITY
+		     + ", " + d[0].STABBR)
+		.style("left", (d3.event.pageX + 5) + "px")
+		.style("top", (d3.event.pageY - 28) + "px");
+	})
 	.on("mouseout", function() {
+	    div.transition()
+		.duration(500)
+		.style("opacity",0)
 	    clearHoverInfo()})
 	.on("click", function(d){
-	    self.updateSimilarInfo(d)});
+	    updateSelectedSchool(d)});
     
 };
 
+SchoolMap.prototype.zoomMap = function(){
+    var self = this;
+    
+    self.mapsvg.append("rect")
+	.attr("width",mapWidth)
+	.attr("height",mapHeight)
+	.style("fill","none")
+	.style("pointer-events","all")
+	.call(d3.zoom()
+	      .scaleExtent([1/2,4])
+	      .on("zoom",zoomed));
+}
+
 SchoolMap.prototype.updateValues = function(){
     var self = this;
-
+    
     self.similarSchools.attr("r",function(d){
 	return Math.sqrt(d[self.selectedMetric])/30
     })
+}
+
+function zoomed() {
+    console.log(similarSchools);
+    var transform = d3.event.transform;
+    similarSchools.attr("transform", function(d) {
+	console.log(d);
+	return "translate(" + transform.applyX(proj([d[0].LONGITUDE, d[0].LATITUDE])[0])
+	    + ","
+	    + transform.applyY(proj([d[0].LONGITUDE, d[0].LATITUDE])[1])
+	    + ")";
+    });
 }
 
 SchoolMap.prototype.updateHoverInfo = function (selectedSchool) {

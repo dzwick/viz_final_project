@@ -1,0 +1,88 @@
+body {
+  margin: 25px;
+}
+
+#map {
+  width: 900px;
+  height: 600px;
+  border: 1px solid silver;
+  background: #E6E6E6;
+}
+
+path {
+    fill: none;
+    //stroke: #222;
+}
+
+g.features {
+  stroke: #222;
+  stroke-width: 0.5;
+}
+
+g.voronoi {
+    stroke-width: .5;
+    stroke: white;
+}
+
+g.similar {
+    stroke-width: 0.5;
+}
+
+.map-line{
+    stroke: #CD7F32;
+}
+
+circle.selected-hover {
+    fill: #CD7F32;
+}
+
+circle.similar-hover {
+    fill: #CD7F32;
+}
+
+circle.selected {
+    fill: gold;
+    opacity: 1;
+}
+
+circle.similar {
+    fill: silver;
+}
+
+li.hover {
+    background-color: silver;
+}
+
+div.hover {
+    background-color: grey;
+}
+
+.tooltip {
+  font-weight: bold;
+  padding: 0.5rem;
+  border: 1px solid silver;
+   color: #222;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px #a6a6a6;
+  opacity: 0.9;
+  position: absolute;
+}
+
+.hidden_lines {
+    stroke-opacity: 0;
+}
+
+#details {
+  margin-top: 2rem;
+}
+
+table {
+  margin-bottom: 0;
+}
+td, th {
+  padding: 6px 9px;
+}
+td {
+  text-align: right;
+}
