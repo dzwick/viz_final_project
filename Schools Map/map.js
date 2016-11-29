@@ -385,8 +385,8 @@ function selectSchool(selectedList) {
 	}
     }
 
+    //Deep copy. We don't want to alter the underlying data.
     formatSelectedList = $.extend({},selectedList[0]);
-    console.log(formatSelectedList);
 
     format = d3.format(",")
     formatSelectedList.COST = format(formatSelectedList.COST);
@@ -394,7 +394,6 @@ function selectSchool(selectedList) {
     formatSelectedList.SAT_AVG_ALL = format(formatSelectedList.SAT_AVG_ALL);
     format = d3.format(",.2%")
     formatSelectedList.ADM_RATE_ALL = format(formatSelectedList.ADM_RATE_ALL);
-    console.log(formatSelectedList);
     
     var detailsHtml = Mustache.render(template, formatSelectedList);
     d3.select('#details').html(detailsHtml);
