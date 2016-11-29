@@ -3,20 +3,25 @@ body {
 }
 
 #map {
-  width: 900px;
-  height: 600px;
+  width: 600px;
+  height: 400px;
   border: 1px solid silver;
-  background: #E6E6E6;
+  background: #edf8fb;
 }
 
 path {
-    fill: none;
+    fill: #b2e2e2;
     //stroke: #222;
+}
+
+path.vor {
+    fill: none;
 }
 
 g.features {
   stroke: #222;
   stroke-width: 0.5;
+  pointer-events: none;
 }
 
 g.voronoi {
@@ -26,35 +31,37 @@ g.voronoi {
 
 g.similar {
     stroke-width: 0.5;
+    pointer-events: none;
 }
 
 .map-line{
-    stroke: #CD7F32;
+    stroke: #fff7bc;
 }
 
 circle.selected-hover {
-    fill: #CD7F32;
+    fill: #fff7bc;
 }
 
 circle.similar-hover {
-    fill: #CD7F32;
-}
-
-circle.selected {
-    fill: gold;
-    opacity: 1;
+    fill: #fff7bc;
 }
 
 circle.similar {
-    fill: silver;
+    fill: #fec44f;
+}
+
+circle.selected {
+    fill: #d95f0e;
+    opacity: 1;
 }
 
 li.hover {
-    background-color: silver;
+    background-color: #fec44f;
+    font-color: #d95f0e;
 }
 
 div.hover {
-    background-color: grey;
+    background-color: #fec44f;
 }
 
 .tooltip {
@@ -67,10 +74,19 @@ div.hover {
   box-shadow: 0px 0px 5px 0px #a6a6a6;
   opacity: 0.9;
   position: absolute;
+  pointer-events: none;
 }
 
-.hidden_lines {
+.hidden-tooltip {
+    display: none;
+}
+
+.hidden-lines {
     stroke-opacity: 0;
+}
+
+.hidden-div {
+    display: none;
 }
 
 #details {
@@ -78,11 +94,30 @@ div.hover {
 }
 
 table {
-  margin-bottom: 0;
+    margin-bottom: 1;
+    margin-left: 5;
 }
 td, th {
   padding: 6px 9px;
 }
 td {
   text-align: right;
+}
+
+.ui-helper-hidden-accessible {
+    display:none;
+}
+
+.ui-autocomplete {
+    max-height: 200px;
+    max-width: 43%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: white;
+    list-style: none;
+}
+
+.ui-autocomplete li:hover {
+    font-color: #d95f0e;
+    background-color: #fff7bc
 }

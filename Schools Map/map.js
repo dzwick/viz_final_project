@@ -1,7 +1,7 @@
 // We specify the dimensions for the map container. We use the same
 // width and height as specified in the CSS above.
-var width = 900,
-    height = 600;
+var width = 600,
+    height = 400;
 
 var selTrans = false;
 var scaleFactor = 1;
@@ -20,7 +20,7 @@ var mapSchools = svg.append('g')
 
 var mapVoronoi = svg.append('g')
     .attr('class','voronoi')
-    .classed('hidden_lines',true);
+    .classed('hidden-lines',true);
 
 var mapSimilar = svg.append('g')
     .attr('class','similar');
@@ -40,7 +40,7 @@ svg.call(zoom).on('dblclick.zoom',null);
 // and set the initial zoom to show the features.
 var projection = d3.geoAlbersUsa()
     .translate([width/2,height/2])
-    .scale(width);
+    .scale(width*1.3);
 
 // We prepare a path object and apply the projection to it.
 var path = d3.geoPath()
@@ -107,6 +107,38 @@ d3.json('data/us-states.json', function(error, nation) {
 			    && d.STABBR != "PR"
 			    && d.STABBR != "VI"});
 	    }
+
+	    schoolNames = schoolSimilarityMatrix
+		.map(function(d,i){return {
+		    label: d[0].INSTNM
+			.concat(" - ")
+			.concat(d[0].CITY)
+			.concat(", ")
+			.concat(d[0].STABBR),
+		    value: d
+		}})
+	    
+	    $( function() {
+		$("#schoolchoice").autocomplete({
+		    source: function(request, response){
+			var results = $.ui.autocomplete
+			    .filter(schoolNames, request.term);
+			response(results.slice(0,100));
+		    },
+		    minLength:3,
+		    select: function(event, ui){
+			hoverSimilarOff();
+			selectSchool(ui.item.value);
+			return false;
+		    },
+		    focus: function(event,ui){
+			$("#schoolchoice").val(ui.item.label);
+			hoverSimilarOff();
+			hoverSimilar(ui.item.value);
+			return false;
+		    }
+		});
+	    });
 	    
 	    mapSchools
 		.selectAll('circle')
@@ -138,17 +170,18 @@ d3.json('data/us-states.json', function(error, nation) {
 		.selectAll('path')
 		.data(schoolDataVoronoi)
 		.enter().append('path')
+		.classed('vor',true)
 		.call(redrawPolygon)
 		.attr("id",function(d){
 		    //VSID stands for Voronoi School ID
 		    return "VSID".concat(d[0][0].UNITID)})
 		.style('pointer-events','all')
-		.on('mousemove',function(d){
+		.on('mouseover',function(d){
 		    hoverSimilar(d[0]);
-		    showTooltip(d[0][0].INSTNM)})
+		    showTooltip(d[0][0])})
 		.on('mouseout',function(d){
-		    hoverSimilarOff(d[0]);
-		    hideTooltip})
+		    hoverSimilarOff();
+		    hideTooltip()})
 		.on('click',function(d){
 		    selectSchool(d[0]);
 		})
@@ -217,7 +250,7 @@ function closeScale(circ){
 
 d3.select("#show-voronoi")
     .on("change",function(){
-	d3.selectAll(".voronoi").classed("hidden_lines",!this.checked);
+	d3.selectAll(".voronoi").classed("hidden-lines",!this.checked);
     });
 
 d3.select("#zoom-reset")
@@ -232,10 +265,10 @@ d3.select("#zoom-reset")
 
 var tooltip = d3.select("#map")
     .append("div")
-    .attr("class", "tooltip hidden");
+    .attr("class", "tooltip hidden-tooltip");
 
 function showTooltip(d){
-
+    
     // Get the current mouse position (as integer)
     var mouse = d3.mouse(d3.select('#map').node()).map(
 	function(d) { return parseInt(d); }
@@ -244,19 +277,22 @@ function showTooltip(d){
     // Calculate the absolute left and top offsets of the tooltip. If the
     // mouse is close to the right border of the map, show the tooltip on
     // the left.
-    var left = mouse[0] + 5;
-    var top = mouse[1] + 25;
+
+    var location = projection([d.LONGITUDE, d.LATITUDE])
+    var left = Math.min(width/1.2-6 * d.INSTNM.length,location[0] + 5);
+    var top = location[1] + height/(2*1.3)-15;
     
-    tooltip.classed('hidden',false)
+    tooltip.classed('hidden-tooltip',false)
 	.attr("style", "left:" + left + "px; top:" + top + "px")
-	.html(d)
+	.html(d.INSTNM)
 }
 
 /**
  * Hide the tooltip.
  */
 function hideTooltip() {
-  tooltip.classed('hidden', true);
+    
+    tooltip.classed('hidden-tooltip', true);
 }
 
 function redrawPolygon(polygon) {
@@ -313,25 +349,15 @@ function hoverSimilar(schoolData){
     
 }
 
-function hoverSimilarOff(schoolData){
+function hoverSimilarOff(){
 
     mapSimilar.selectAll('line').remove();
-    
-    d3.select('#CSID'.concat(schoolData[0].UNITID))
-	.classed('selected-hover',false);
 
-    d3.select('#CSID'.concat(schoolData[0].UNITID))
-	.attr("r",function(){
-	    return closeScale(this,1)});
+    mapSchools.selectAll('circle').classed('selected-hover',false)
+	.classed('similar-hover',false);
 
-    for(var i = 1; i < schoolData.length; i++){
-	
-	d3.select('#CSID'.concat(schoolData[i].UNITID))
-	    .classed('similar-hover',false);
-
-	d3.select('#CSID'.concat(schoolData[i].UNITID))
-	    .attr("r",function(){return closeScale(this)});
-    }
+    mapSchools.selectAll('circle').attr("r",function(){
+	return closeScale(this)})
 }
 
 function selectSchool(selectedList) {
@@ -353,28 +379,46 @@ function selectSchool(selectedList) {
 		    .classed('similar',true);
 	    }
 	    
-	    svg.selectAll('circle').transition().duration(500)
+	    svg.selectAll('circle').transition().duration(200)
 		.attr('r',function(){return closeScale(this)})
 		.on('end',function(){selTrans = false})
 	}
     }
 
+    formatSelectedList = $.extend({},selectedList[0]);
+    console.log(formatSelectedList);
+    
     var detailsHtml = Mustache.render(template, selectedList[0]);
     d3.select('#details').html(detailsHtml);
     d3.select('#details').classed("hidden", false);
+    
+    d3.select('#selected-school-name')
+	.on('mouseover', function(){
+	    hoverSimilar(selectedList)})
+	.on('mouseout', function(){
+	    hoverSimilarOff()})
+    
+    
+    d3.select('#farther-schools-header').classed('hidden-div',false);
 
-    firstListNum = Math.ceil(selectedList.length/2);
+    firstListNum = Math.ceil(selectedList.length/3);
+    secondListNum = Math.ceil((selectedList.length-firstListNum)/2)+firstListNum;
 
     d3.select('#farther-schools-list').attr("start",firstListNum);
+    d3.select('#farthest-schools-list').attr("start",secondListNum);
     
     var listSimSchools = d3.select('#closest-schools-list')
 	.selectAll('li').data(selectedList.slice(1,firstListNum))
 
     var listSimSchools2 = d3.select('#farther-schools-list')
-	.selectAll('li').data(selectedList.slice(firstListNum))
+	.selectAll('li').data(selectedList.slice(firstListNum,secondListNum))
+
+    var listSimSchools3 = d3.select('#farthest-schools-list')
+	.selectAll('li').data(selectedList.slice(secondListNum))
     
     listSimSchools.exit().remove();
     listSimSchools2.exit().remove();
+    listSimSchools3.exit().remove();
     
     listSimSchools
 	.enter()
@@ -391,10 +435,7 @@ function selectSchool(selectedList) {
 	    )[0])})
 	.on('mouseout', function(d){
 	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',false);
-	    hoverSimilarOff(schoolSimilarityMatrix.filter(
-		function(k){
-		    return k[0].UNITID == d.UNITID}
-	    )[0])})
+	    hoverSimilarOff()})
 	.on('click', function(d){
 	    selectSchool(schoolSimilarityMatrix.filter(
 		function(k){
@@ -417,16 +458,37 @@ function selectSchool(selectedList) {
 	    )[0])})
 	.on('mouseout', function(d){
 	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',false);
-	    hoverSimilarOff(schoolSimilarityMatrix.filter(
-		function(k){
-		    return k[0].UNITID == d.UNITID}
-	    )[0])})
+	    hoverSimilarOff()})
 	.on('click', function(d){
 	    selectSchool(schoolSimilarityMatrix.filter(
 		function(k){
 		    return k[0].UNITID == d.UNITID}
 	    )[0])})
 	.text(function(d){return d.INSTNM})
+
+    listSimSchools3
+	.enter()
+	.append('li')
+	.merge(listSimSchools3)
+	.attr('id',function(d){
+	    //LSID stands for "List School ID"
+	    return 'LSID'.concat(d.UNITID)})
+	.on('mouseover', function(d){
+	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',true);
+	    hoverSimilar(schoolSimilarityMatrix.filter(
+		function(k){
+		    return k[0].UNITID == d.UNITID}
+	    )[0])})
+	.on('mouseout', function(d){
+	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',false);
+	    hoverSimilarOff();})
+	.on('click', function(d){
+	    selectSchool(schoolSimilarityMatrix.filter(
+		function(k){
+		    return k[0].UNITID == d.UNITID}
+	    )[0])})
+	.text(function(d){return d.INSTNM})
+    
 }
 
 
