@@ -387,8 +387,16 @@ function selectSchool(selectedList) {
 
     formatSelectedList = $.extend({},selectedList[0]);
     console.log(formatSelectedList);
+
+    format = d3.format(",")
+    formatSelectedList.COST = format(formatSelectedList.COST);
+    format = d3.format(".0f")
+    formatSelectedList.SAT_AVG_ALL = format(formatSelectedList.SAT_AVG_ALL);
+    format = d3.format(",.2%")
+    formatSelectedList.ADM_RATE_ALL = format(formatSelectedList.ADM_RATE_ALL);
+    console.log(formatSelectedList);
     
-    var detailsHtml = Mustache.render(template, selectedList[0]);
+    var detailsHtml = Mustache.render(template, formatSelectedList);
     d3.select('#details').html(detailsHtml);
     d3.select('#details').classed("hidden", false);
     
