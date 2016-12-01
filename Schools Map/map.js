@@ -129,6 +129,7 @@ d3.json('data/us-states.json', function(error, nation) {
 		    select: function(event, ui){
 			hoverSimilarOff();
 			selectSchool(ui.item.value);
+			$(this).val('');
 			return false;
 		    },
 		    focus: function(event,ui){
@@ -254,15 +255,32 @@ d3.select("#show-voronoi")
     });
 
 d3.select("#zoom-reset")
-    .on('mouseover',function(){
-	d3.select(this).classed("hover",true)})
-    .on('mouseout',function(){
-	d3.select(this).classed("hover",false)})
     .on('click',function(){
 	svg.transition().duration(750)
 	    .call(zoom.transform,d3.zoomIdentity);
     })
+/*
+d3.select("#map-button")
+    .on('click',function(){
+	d3.select("#map-contain").classed("hidden-div",false);
+	d3.select("#filter-contain").classed("hidden-div",true);
+	d3.select("#demo-contain").classed("hidden-div",true);
+    })
 
+d3.select("#filter-button")
+    .on('click',function(){
+	d3.select("#map-contain").classed("hidden-div",true);
+	d3.select("#filter-contain").classed("hidden-div",false);
+	d3.select("#demo-contain").classed("hidden-div",true);
+    })
+
+d3.select("#demo-button")
+    .on('click',function(){
+	d3.select("#map-contain").classed("hidden-div",true);
+	d3.select("#filter-contain").classed("hidden-div",true);
+	d3.select("#demo-contain").classed("hidden-div",false);
+    })
+*/
 var tooltip = d3.select("#map")
     .append("div")
     .attr("class", "tooltip hidden-tooltip");
@@ -415,17 +433,9 @@ function selectSchool(selectedList) {
     d3.select('#farthest-schools-list').attr("start",secondListNum);
     
     var listSimSchools = d3.select('#closest-schools-list')
-	.selectAll('li').data(selectedList.slice(1,firstListNum))
-
-    var listSimSchools2 = d3.select('#farther-schools-list')
-	.selectAll('li').data(selectedList.slice(firstListNum,secondListNum))
-
-    var listSimSchools3 = d3.select('#farthest-schools-list')
-	.selectAll('li').data(selectedList.slice(secondListNum))
+	.selectAll('li').data(selectedList.slice(1))
     
     listSimSchools.exit().remove();
-    listSimSchools2.exit().remove();
-    listSimSchools3.exit().remove();
     
     listSimSchools
 	.enter()
@@ -449,53 +459,6 @@ function selectSchool(selectedList) {
 		    return k[0].UNITID == d.UNITID}
 	    )[0])})
 	.text(function(d){return d.INSTNM})
-
-    listSimSchools2
-	.enter()
-	.append('li')
-	.merge(listSimSchools2)
-	.attr('id',function(d){
-	    //LSID stands for "List School ID"
-	    return 'LSID'.concat(d.UNITID)})
-	.on('mouseover', function(d){
-	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',true);
-	    hoverSimilar(schoolSimilarityMatrix.filter(
-		function(k){
-		    return k[0].UNITID == d.UNITID}
-	    )[0])})
-	.on('mouseout', function(d){
-	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',false);
-	    hoverSimilarOff()})
-	.on('click', function(d){
-	    selectSchool(schoolSimilarityMatrix.filter(
-		function(k){
-		    return k[0].UNITID == d.UNITID}
-	    )[0])})
-	.text(function(d){return d.INSTNM})
-
-    listSimSchools3
-	.enter()
-	.append('li')
-	.merge(listSimSchools3)
-	.attr('id',function(d){
-	    //LSID stands for "List School ID"
-	    return 'LSID'.concat(d.UNITID)})
-	.on('mouseover', function(d){
-	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',true);
-	    hoverSimilar(schoolSimilarityMatrix.filter(
-		function(k){
-		    return k[0].UNITID == d.UNITID}
-	    )[0])})
-	.on('mouseout', function(d){
-	    d3.select('#LSID'.concat(d.UNITID)).classed('hover',false);
-	    hoverSimilarOff();})
-	.on('click', function(d){
-	    selectSchool(schoolSimilarityMatrix.filter(
-		function(k){
-		    return k[0].UNITID == d.UNITID}
-	    )[0])})
-	.text(function(d){return d.INSTNM})
-    
 }
 
 

@@ -7,9 +7,9 @@
      <!-- CSS libraries -->
      <link href="http://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
 	   rel="stylesheet" type="text/css">
-    
     <!-- Custom CSS styles -->
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="public/css/style.css" rel="stylesheet" type="text/css">
+    
   </head>
   <body>
     <div class="container">
@@ -112,6 +112,12 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     
     <!-- Custom JS code -->
-    <script src="map.js"></script>
+    <script src="public/js/layout.js"></script>
+    <script src="public/js/dataload.js"></script>
+    <script src="public/js/listlayout.js"></script>
+    <script src="public/js/maplayout.js"></script>
+    <script src="public/js/datacharts.js"></script>
+    <script src="public/js/searchbox.js"></script>
+    <script src="public/js/main.js"></script>
   </body>
 </html>
