@@ -1,0 +1,152 @@
+.container {
+    max-width: 1280px;
+}
+
+body {
+  margin: 25px;
+}
+
+#map {
+  width: 750px;
+  height: 500px;
+  border: 1px solid silver;
+  background: #edf8fb;
+}
+
+#filter {
+    width: 750px;
+    height: 500px;
+    border: 1px solid silver;
+    background: #edf8fb;
+}
+
+.filterDiv {
+    width: 600px;
+    height: 400px;
+    /*background: #edf8fb;*/
+}
+
+.mapPath {
+    fill: #b2e2e2;
+    stroke: #222;
+}
+
+path.vor {
+    fill: none;
+}
+
+g.features {
+  stroke: #222;
+  stroke-width: 0.5;
+  pointer-events: none;
+}
+
+g.voronoi {
+    stroke-width: 1;
+    stroke: white;
+}
+
+g.similar {
+    stroke-width: 1;
+    pointer-events: none;
+}
+
+.map-line{
+    stroke: #fff7bc;
+}
+
+circle.selected-hover {
+    fill: #fff7bc;
+    //stroke: #fff7bc;
+    //stroke-width: 1;
+    //opacity: .7;
+}
+
+circle.similar-hover {
+    fill: #fff7bc;
+    //stroke: #fff7bc;
+    //stroke-width: 1;
+    //opacity: .7;
+}
+
+circle.similar {
+    fill: #fec44f;
+    //opacity: .7;
+}
+
+circle.selected {
+    fill: #d95f0e;
+    //opacity: .7;
+}
+
+li.hover {
+    background-color: #fec44f;
+    font-color: #d95f0e;
+}
+
+.tooltip {
+  font-weight: bold;
+  padding: 0.5rem;
+  border: 1px solid silver;
+   color: #222;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px #a6a6a6;
+  opacity: 0.9;
+  position: absolute;
+  pointer-events: none;
+}
+
+.hidden-tooltip {
+    display: none;
+}
+
+.hidden-lines {
+    stroke-opacity: 0;
+}
+
+.hidden-div {
+    display: none;
+}
+
+#details {
+  margin-top: 2rem;
+}
+
+table {
+    margin-bottom: 1;
+    margin-left: 5;
+}
+td, th {
+  padding: 6px 9px;
+}
+td {
+  text-align: right;
+}
+
+.ui-helper-hidden-accessible {
+    display:none;
+}
+
+.ui-autocomplete {
+    max-height: 200px;
+    max-width: 43%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: white;
+    list-style: none;
+}
+
+.ui-autocomplete li:hover {
+    font-color: #d95f0e;
+    background-color: #fff7bc
+}
+
+.brush .selection {
+    fill-opacity: 1;   
+    fill: #d95f0e;
+}
+
+.stateSelected {
+    fill: #b2e2e2;
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>CS-6630 Fall, 2016 Final Project</title>
+
+     <!-- CSS libraries -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+	   rel="stylesheet" type="text/css">
+    <!-- Custom CSS styles -->
+    <link href="public/css/style.css" rel="stylesheet" type="text/css">
+    
+  </head>
+  <body>
+    <div class="container">
+      <div id="first-row" class = "twelve columns">
+	<h1 align="left" class = "eight columns">
+	  Exploring College Affinities</h1>
+	<h6 align = "center" class = "four columns">
+	  <i>Clark Barnett and Dylan Zwick</i><br>
+	  <b>Final Project</b> CS-6630 Visualization<br>
+	  University of Utah
+	</h6>
+      </div>
+      <div id="second-row" class = "twelve columns">
+	<button id="map-button" class="three columns" align="center">
+	  Map</button>
+	<!--<button id="chart-button" class="two columns" align="center">
+	  Chart</button>-->
+	<button id="filter-button" class="three columns" align="center">
+	  Filter</button>
+	<button id="demo-button" class="three columns" align="center">
+	  Demo</button>
+	<button id="process-button" class="three columns" align="center">
+	  Process Book</button>
+      </div>
+      <div id="spacer" class = "twelve columns"><br></div>
+      <div id="third row" class = "twelve columns">
+	<div id="school-search" class="ui-widget" class = "ten columns">
+	  <label for="schools" class="two columns" align="left">
+	    <b>School Search</b>: </label>
+	  <input id="schoolchoice" class="eight columns" align="left"></input>
+	</div>
+      </div>
+
+      <div id="main-layout" class="twelve columns">
+	<div id="main-contain" class="eight columns">
+	  <div id="map-contain" class="twelve columns">
+	    <div id="map" class="twelve columns"></div>
+	    <div id="options" class="twelve columns">
+	      <div id="voronoi-check" class="five columns">
+		<input type="checkbox" id="show-voronoi" !checked></input>
+		Display Voronoi
+	      </div>
+	      <button id="zoom-reset" class = "five columns" align="center">
+		Reset Zoom
+	      </button>
+	    </div>
+	  </div>
+	  <div id="filter-contain" class="twelve columns hidden-div">
+	    <div id="filter" class="twelve columns"></div>
+	    <button id="apply-button" class="five columns" align="center">
+	      Apply</button>
+	    <button id="reset-button" class="five columns" align="center">
+	      Reset</button>
+	    <button id="cost-button" class="three columns" align="center">
+	      Cost</button>
+	    <button id="SAT-button" class="two columns" align="center">
+	      SAT</button>
+	    <button id="size-button" class="two columns" align="center">
+	      Size</button>
+	    <button id="adm-button" class="three columns" align="center">
+	      Admission</button>
+	    <button id="location-button" class="ten columns" align="center">State</button>
+	  </div>
+	  <div id="demo-contain" class="twelve columns hidden-div">
+	    <iframe width="750" height="500" src="https://www.youtube.com/embed/2PAtY5zBhUA" frameborder="0" allowfullscreen></iframe>
+	  </div>
+	  <div id="process-contain" class="twelve columns hidden-div">
+	    <embed src="data/Process%20Book.pdf" width="750" height="500"
+		   type="application/pdf">
+	  </div>
+	</div>
+	<div id="loading" class="four colums">
+	  <h4>Loading Data... Please Wait</h4>
+	</div>
+	<div id="details" class="hidden row four columns"></div>
+      </div>
+    </div>
+    <!-- Mustache template, rendered later to show the details of a feature -->
+    <script id="template" type="x-tmpl-mustache">
+      <h4 id="selected-school-name" class="twelve columns"
+	  align="center" font-color="#d95f0e">{{ INSTNM }}</h4>
+      <div class="row" class="twelve columns">
+	<table id = "selected-school-data" class = "twelve columns">
+          <tr>
+            <th colspan="2">Location:</th>
+            <td colspan="2">{{ CITY }}, {{ STABBR }}</td>
+          </tr>
+          <tr>
+            <th>Size:</th>
+            <td>{{ CCSIZSET }} </td>
+            <th>Cost:</th>
+            <td>${{ COST }} </td>
+          </tr>
+          <tr>
+            <th>Average SAT:</th>
+            <td>{{ SAT_AVG_ALL }} </td>
+            <th>Admission Rate:</th>
+            <td>{{ ADM_RATE_ALL }} </td>
+          </tr>
+	</table>
+	<div id = "closest-schools-header" class="twelve columns">
+	  <h5>Similar Schools</h5>
+	</div>
+	<div id = "closest-schools" class = "twelve columns">
+	  <ol id = "closest-schools-list"></ol>
+	</div>
+      </div>
+    </script>
+
+    <!-- JS libraries -->
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- Custom JS code -->
+    <script src="public/js/filterlayout.js"></script>
+    <script src="public/js/layout.js"></script>
+    <script src="public/js/dataload.js"></script>
+    <script src="public/js/listlayout.js"></script>
+    <script src="public/js/maplayout.js"></script>
+    <script src="public/js/datacharts.js"></script>
+    <script src="public/js/searchbox.js"></script>
+    <script src="public/js/main.js"></script>
+  </body>
+</html>
