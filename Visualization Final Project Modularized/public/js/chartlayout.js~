@@ -1,0 +1,16 @@
+/*
+
+  File: chartlayout.js
+
+  Authors: Clark Barnett and Dylan Zwick
+
+  Final Project: CS-6630 Visualization
+  University of Utah
+  Fall, 2016
+
+  This file handles the creation of the bar charts.
+*/
+
+/*
+  Constructor for the Data Load
+*/

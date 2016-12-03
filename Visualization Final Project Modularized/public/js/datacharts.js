@@ -16,6 +16,7 @@ function DataCharts(mapLayout){
     var self = this;
 
     self.listLayout = mapLayout.listLayout;
+    self.chartLayout = mapLayout.chartLayout;
     self.mapLayout = mapLayout;
     
     self.init();
@@ -27,6 +28,8 @@ DataCharts.prototype.init = function(){
 
     self.width = self.mapLayout.width;
     self.height = self.mapLayout.height;
+
+    self.schoolCharts = self.chartLayout.schoolCharts;
     
     self.svg = self.mapLayout.svg;
     self.mapSimilar = self.mapLayout.mapSimilar;
@@ -56,7 +59,16 @@ DataCharts.prototype.init = function(){
 	.on('click',function(d){
 	    self.selectSchool(d[0]);
 	});
-
+    /*
+    self.schoolCharts
+	.on('mouseover',function(d){
+	    self.hoverSimilar(d[0])})
+	.on('mouseout',function(d){
+	    self.hoverSimilarOff()})
+	.on('click',function(d){
+	    self.selectSchool(d)})
+    */
+    
     var searchBox = new SearchBox(self);
 }
 
@@ -171,7 +183,9 @@ DataCharts.prototype.selectSchool =  function(selectedList){
 			 .schoolSimilarityMatrix.filter(
 		function(k){
 		    return k[0].UNITID == d.UNITID}
-	    )[0])})
+			 )[0])})
+
+    self.chartLayout.drawCharts(selectedList);
 };
 
 DataCharts.prototype.showTooltip = function(data){

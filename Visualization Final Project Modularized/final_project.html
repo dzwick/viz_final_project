@@ -5,7 +5,7 @@
     <title>CS-6630 Fall, 2016 Final Project</title>
 
      <!-- CSS libraries -->
-     <link href="http://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
 	   rel="stylesheet" type="text/css">
     <!-- Custom CSS styles -->
     <link href="public/css/style.css" rel="stylesheet" type="text/css">
@@ -45,6 +45,7 @@
 
       <div id="main-layout" class="twelve columns">
 	<div id="main-contain" class="eight columns">
+
 	  <div id="map-contain" class="twelve columns">
 	    <div id="map" class="twelve columns"></div>
 	    <div id="options" class="twelve columns">
@@ -57,6 +58,11 @@
 	      </button>
 	    </div>
 	  </div>
+
+	  <div id="chart-contain" class="twelve columns hidden-div">
+	    <div id="chart" class="twelve columns"></div>
+	  </div>  
+	  
 	  <div id="filter-contain" class="twelve columns hidden-div">
 	    <div id="filter" class="twelve columns"></div>
 	    <button id="apply-button" class="five columns" align="center">
@@ -73,9 +79,13 @@
 	      Admission</button>
 	    <button id="location-button" class="ten columns" align="center">State</button>
 	  </div>
+
 	  <div id="demo-contain" class="twelve columns hidden-div">
 	    <iframe width="600" height="400" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
 	  </div>
+
+	  
+	  
 	</div>
 	<div id="details" class="hidden row four columns"></div>
       </div>
@@ -91,16 +101,16 @@
             <td colspan="2">{{ CITY }}, {{ STABBR }}</td>
           </tr>
           <tr>
-            <th>Size:</th>
-            <td>{{ CCSIZSET }} </td>
             <th>Cost:</th>
             <td>${{ COST }} </td>
-          </tr>
-          <tr>
             <th>Average SAT:</th>
             <td>{{ SAT_AVG_ALL }} </td>
+          </tr>
+          <tr>
             <th>Admission Rate:</th>
             <td>{{ ADM_RATE_ALL }} </td>
+            <th>Size:</th>
+            <td>{{ CCSIZSET }} </td>
           </tr>
 	</table>
 	<div id = "closest-schools-header" class="twelve columns">
@@ -113,8 +123,8 @@
     </script>
 
     <!-- JS libraries -->
-    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js">
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js">
     </script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -123,9 +133,11 @@
     <script src="public/js/layout.js"></script>
     <script src="public/js/dataload.js"></script>
     <script src="public/js/listlayout.js"></script>
+    <script src="public/js/chartlayout.js"></script>
     <script src="public/js/maplayout.js"></script>
     <script src="public/js/datacharts.js"></script>
     <script src="public/js/searchbox.js"></script>
+    <script src="public/js/filterlayout.js"></script>
     <script src="public/js/main.js"></script>
   </body>
 </html>

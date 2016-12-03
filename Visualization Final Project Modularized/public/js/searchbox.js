@@ -75,4 +75,6 @@ SearchBox.prototype.init = function(){
 	    }
 	});
     });
+
+    var filterLayout = new FilterLayout(self);
 };

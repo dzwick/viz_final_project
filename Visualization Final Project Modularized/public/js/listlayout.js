@@ -18,8 +18,6 @@ function ListLayout(nation,schoolSimilarityMatrix){
     self.nation = nation;
     self.schoolSimilarityMatrix = schoolSimilarityMatrix;
 
-    
-    
     self.init();
 };
 
@@ -31,7 +29,7 @@ ListLayout.prototype.init = function(){
     
     Mustache.parse(self.template);
 
-    var mapLayout = new MapLayout(self);
+    var chartLayout = new ChartLayout(self);
 };
 
 ListLayout.prototype.selectSchoolList =
